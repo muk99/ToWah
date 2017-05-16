@@ -31,7 +31,7 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
     
-    void updateIIRCoefficients();
+    void updateCutOffFrequency();
     void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
 
     //==============================================================================
@@ -66,11 +66,16 @@ private:
 	AudioParameterFloat* gain2;
     AudioParameterFloat* q;
 	
-	double samplerate;
+	
+	
+	// Hidden Prameters
 	float gain_value = 4.0f;
 	float q_value = 3.0f;
 	float min_freq = 800.0f;
 	float max_freq = 6000.0f;
+	
+	// Prameters for filters
+	double samplerate;
 	int direction[2] = {1, 1};
 	double current_freq[2] = {100.0f, 120.0f};
 	IIRFilter filter1[4];

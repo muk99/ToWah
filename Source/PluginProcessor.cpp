@@ -130,7 +130,7 @@ bool ToWahAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 }
 #endif
 
-void ToWahAudioProcessor::updateIIRCoefficients()
+void ToWahAudioProcessor::updateCutOffFrequency()
 {
 	float freq1Copy = *freq1;
 	float freq2Copy = *freq2;
@@ -153,9 +153,11 @@ void ToWahAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& m
 	float gain2Copy = *gain2;
 	float QCopy = *q;
 	
+	// make BandPass using current_freq
 	ic[0] = IIRCoefficients::makeBandPass (getSampleRate(), current_freq[0], QCopy*q_value);
 	ic[1] = IIRCoefficients::makeBandPass (getSampleRate(), current_freq[1], QCopy*q_value);
 	
+	// filtering
 	for (int i=0; i<2; i++)
 	{
 		float *data = buffer.getWritePointer(i);
@@ -178,7 +180,7 @@ void ToWahAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& m
 		}
 	}
 	
-	updateIIRCoefficients();
+	updateCutOffFrequency();
 }
 
 //==============================================================================
